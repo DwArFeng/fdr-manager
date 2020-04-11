@@ -23,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 /**
  * 过滤器支持控制器。
@@ -32,7 +31,7 @@ import javax.validation.constraints.NotNull;
  * @since alpha-0.0.1
  */
 @RestController
-@RequestMapping("/api/v1/trigger-support")
+@RequestMapping("/api/v1")
 public class TriggerSupportController {
 
     @Autowired
@@ -43,29 +42,29 @@ public class TriggerSupportController {
     @Autowired
     private BeanTransformer<TriggerSupport, FastJsonTriggerSupport> beanTransformer;
 
-    @GetMapping("/exists")
+    @GetMapping("/trigger-support/{id}/exists")
     @BehaviorAnalyse
-    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @RequestParam("key") @NotNull String key) {
+    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            boolean exists = service.exists(new StringIdKey(key));
+            boolean exists = service.exists(new StringIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(exists));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Boolean.class, e, sem));
         }
     }
 
-    @GetMapping("")
+    @GetMapping("/trigger-support/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<FastJsonTriggerSupport> get(HttpServletRequest request, @RequestParam("key") @NotNull String key) {
+    public FastJsonResponseData<FastJsonTriggerSupport> get(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            TriggerSupport triggerSupport = service.get(new StringIdKey(key));
+            TriggerSupport triggerSupport = service.get(new StringIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(FastJsonTriggerSupport.of(triggerSupport)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(FastJsonTriggerSupport.class, e, sem));
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/trigger-support")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<FastJsonStringIdKey> insert(
@@ -79,7 +78,7 @@ public class TriggerSupportController {
         }
     }
 
-    @PatchMapping("")
+    @PatchMapping("/trigger-support")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
@@ -93,18 +92,18 @@ public class TriggerSupportController {
         }
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/trigger-support/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<Object> delete(HttpServletRequest request, @RequestParam("key") String key) {
+    public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            service.delete(new StringIdKey(key));
+            service.delete(new StringIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/trigger-support/all")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonTriggerSupport>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
@@ -117,7 +116,7 @@ public class TriggerSupportController {
         }
     }
 
-    @GetMapping("/id-like")
+    @GetMapping("/trigger-support/id-like")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonTriggerSupport>> idLike(
             HttpServletRequest request,
@@ -131,7 +130,7 @@ public class TriggerSupportController {
         }
     }
 
-    @GetMapping("/label-like")
+    @GetMapping("/trigger-support/label-like")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonTriggerSupport>> labelLike(
             HttpServletRequest request,

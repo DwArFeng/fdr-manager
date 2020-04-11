@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
  * @since alpha-0.0.1
  */
 @RestController
-@RequestMapping("/api/v1/filter-support")
+@RequestMapping("/api/v1")
 public class FilterSupportController {
 
     @Autowired
@@ -43,29 +43,29 @@ public class FilterSupportController {
     @Autowired
     private BeanTransformer<FilterSupport, FastJsonFilterSupport> beanTransformer;
 
-    @GetMapping("/exists")
+    @GetMapping("/filter-support/{id}/exists")
     @BehaviorAnalyse
-    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @RequestParam("key") @NotNull String key) {
+    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            boolean exists = service.exists(new StringIdKey(key));
+            boolean exists = service.exists(new StringIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(exists));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Boolean.class, e, sem));
         }
     }
 
-    @GetMapping("")
+    @GetMapping("/filter-support/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<FastJsonFilterSupport> get(HttpServletRequest request, @RequestParam("key") @NotNull String key) {
+    public FastJsonResponseData<FastJsonFilterSupport> get(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            FilterSupport filterSupport = service.get(new StringIdKey(key));
+            FilterSupport filterSupport = service.get(new StringIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(FastJsonFilterSupport.of(filterSupport)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(FastJsonFilterSupport.class, e, sem));
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/filter-support")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<FastJsonStringIdKey> insert(
@@ -79,7 +79,7 @@ public class FilterSupportController {
         }
     }
 
-    @PatchMapping("")
+    @PatchMapping("/filter-support")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
@@ -93,18 +93,18 @@ public class FilterSupportController {
         }
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/filter-support/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<Object> delete(HttpServletRequest request, @RequestParam("key") String key) {
+    public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            service.delete(new StringIdKey(key));
+            service.delete(new StringIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/filter-support/all")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonFilterSupport>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
@@ -117,7 +117,7 @@ public class FilterSupportController {
         }
     }
 
-    @GetMapping("/id-like")
+    @GetMapping("/filter-support/id-like")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonFilterSupport>> idLike(
             HttpServletRequest request,
@@ -131,7 +131,7 @@ public class FilterSupportController {
         }
     }
 
-    @GetMapping("/label-like")
+    @GetMapping("/filter-support/label-like")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonFilterSupport>> labelLike(
             HttpServletRequest request,

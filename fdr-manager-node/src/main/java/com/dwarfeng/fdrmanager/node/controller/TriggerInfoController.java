@@ -23,16 +23,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 /**
- * 触发器信息控制器。
+ * 过滤器信息控制器。
  *
  * @author DwArFeng
  * @since alpha-0.0.1
  */
 @RestController
-@RequestMapping("/api/v1/trigger-info")
+@RequestMapping("/api/v1")
 public class TriggerInfoController {
 
     @Autowired
@@ -43,29 +42,29 @@ public class TriggerInfoController {
     @Autowired
     private BeanTransformer<TriggerInfo, JSFixedFastJsonTriggerInfo> beanTransformer;
 
-    @GetMapping("/exists")
+    @GetMapping("/trigger-info/{id}/exists")
     @BehaviorAnalyse
-    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @RequestParam("key") @NotNull long key) {
+    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            boolean exists = service.exists(new LongIdKey(key));
+            boolean exists = service.exists(new LongIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(exists));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Boolean.class, e, sem));
         }
     }
 
-    @GetMapping("")
+    @GetMapping("/trigger-info/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonTriggerInfo> get(HttpServletRequest request, @RequestParam("key") @NotNull long key) {
+    public FastJsonResponseData<JSFixedFastJsonTriggerInfo> get(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            TriggerInfo triggerInfo = service.get(new LongIdKey(key));
+            TriggerInfo triggerInfo = service.get(new LongIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonTriggerInfo.of(triggerInfo)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonTriggerInfo.class, e, sem));
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/trigger-info")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<JSFixedFastJsonLongIdKey> insert(
@@ -79,7 +78,7 @@ public class TriggerInfoController {
         }
     }
 
-    @PatchMapping("")
+    @PatchMapping("/trigger-info")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
@@ -93,18 +92,18 @@ public class TriggerInfoController {
         }
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/trigger-info/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<Object> delete(HttpServletRequest request, @RequestParam("key") long key) {
+    public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            service.delete(new LongIdKey(key));
+            service.delete(new LongIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/trigger-info/all")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonTriggerInfo>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
@@ -117,13 +116,13 @@ public class TriggerInfoController {
         }
     }
 
-    @GetMapping("/child-for-point")
+    @GetMapping("/point/{pointId}/trigger-infos")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonTriggerInfo>> childForPoint(
             HttpServletRequest request,
-            @RequestParam("key") long key, @RequestParam("page") int page, @RequestParam("rows") int rows) {
+            @PathVariable("pointId") long pointId, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<TriggerInfo> all = service.childForPoint(new LongIdKey(key), new PagingInfo(page, rows));
+            PagedData<TriggerInfo> all = service.childForPoint(new LongIdKey(pointId), new PagingInfo(page, rows));
             PagedData<JSFixedFastJsonTriggerInfo> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {

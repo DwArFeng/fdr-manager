@@ -23,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 /**
  * 账户控制器。
@@ -32,7 +31,7 @@ import javax.validation.constraints.NotNull;
  * @since alpha-0.0.1
  */
 @RestController
-@RequestMapping("/api/v1/point")
+@RequestMapping("/api/v1")
 public class PointController {
 
     @Autowired
@@ -43,29 +42,29 @@ public class PointController {
     @Autowired
     private BeanTransformer<Point, JSFixedFastJsonPoint> beanTransformer;
 
-    @GetMapping("/exists")
+    @GetMapping("/point/{id}/exists")
     @BehaviorAnalyse
-    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @RequestParam("key") @NotNull long key) {
+    public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            boolean exists = service.exists(new LongIdKey(key));
+            boolean exists = service.exists(new LongIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(exists));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Boolean.class, e, sem));
         }
     }
 
-    @GetMapping("")
+    @GetMapping("/point/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPoint> get(HttpServletRequest request, @RequestParam("key") @NotNull long key) {
+    public FastJsonResponseData<JSFixedFastJsonPoint> get(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            Point point = service.get(new LongIdKey(key));
+            Point point = service.get(new LongIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPoint.of(point)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPoint.class, e, sem));
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/point")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<JSFixedFastJsonLongIdKey> insert(
@@ -79,7 +78,7 @@ public class PointController {
         }
     }
 
-    @PatchMapping("")
+    @PatchMapping("/point")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
@@ -93,18 +92,18 @@ public class PointController {
         }
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/point/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<Object> delete(HttpServletRequest request, @RequestParam("key") long key) {
+    public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            service.delete(new LongIdKey(key));
+            service.delete(new LongIdKey(id));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/point/all")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonPoint>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
@@ -117,13 +116,13 @@ public class PointController {
         }
     }
 
-    @GetMapping("/name-like")
+    @GetMapping("/point/name-like")
     @BehaviorAnalyse
     public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonPoint>> nameLike(
             HttpServletRequest request,
-            @RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("rows") int rows) {
+            @RequestParam("pattern") String pattern, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<Point> all = service.nameLike(name, new PagingInfo(page, rows));
+            PagedData<Point> all = service.nameLike(pattern, new PagingInfo(page, rows));
             PagedData<JSFixedFastJsonPoint> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
