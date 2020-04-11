@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class ExceptionCodeOffsetConfiguration {
 
-    @Value("${fdr.exception_code_offset.subgrade}")
+    @Value("${fdr_manager.exception_code_offset.subgrade}")
     private int subgradeExceptionCodeOffset;
 
     @PostConstruct
