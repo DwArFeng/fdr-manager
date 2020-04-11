@@ -6,7 +6,7 @@
 
     <groupId>com.dwarfeng</groupId>
     <artifactId>fdr-manager</artifactId>
-    <version>alpha-0.0.1.a</version>
+    <version>1.0.0.a-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -329,32 +329,32 @@
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-stack</artifactId>
-                <version>alpha-0.0.1.a</version>
+                <version>1.0.0.a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-sdk</artifactId>
-                <version>alpha-0.0.1.a</version>
+                <version>1.0.0.a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-impl</artifactId>
-                <version>alpha-0.0.1.a</version>
+                <version>1.0.0.a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-node</artifactId>
-                <version>alpha-0.0.1.a</version>
+                <version>1.0.0.a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-ui</artifactId>
-                <version>alpha-0.0.1.a</version>
+                <version>1.0.0.a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-distribution</artifactId>
-                <version>alpha-0.0.1.a</version>
+                <version>1.0.0.a-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
