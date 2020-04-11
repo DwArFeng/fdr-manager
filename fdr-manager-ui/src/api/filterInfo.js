@@ -3,20 +3,20 @@ import {
 } from '../util/http';
 
 export function exists(key) {
-  return get('/filter-info/exists', {
-    key,
-  });
+  return get(`/filter-info/${key}/exists`, {});
 }
 
 export function inspect(key) {
-  return get('/filter-info', {
-    key,
-  });
+  return get(`/filter-info/${key}`, {});
 }
 
-export function insert(pointkey, enabled, remark, content, type) {
+export function insert(key, pointkey, enabled, remark, content, type) {
+  let finalKey = { long_id: key };
+  if (key === '') {
+    finalKey = null;
+  }
   return post('/filter-info', {
-    key: null,
+    key: finalKey,
     pointKey: {
       long_id: pointkey,
     },
@@ -28,9 +28,7 @@ export function insert(pointkey, enabled, remark, content, type) {
 }
 
 export function remove(key) {
-  return del('/filter-info', {
-    key,
-  });
+  return del(`/filter-info/${key}`, {});
 }
 
 export function update(key, pointkey, enabled, remark, content, type) {
@@ -56,7 +54,7 @@ export function all(page, rows) {
 }
 
 export function childForPoint(key, page, rows) {
-  return get('/filter-info/child-for-point', {
+  return get(`/point/${key}/filter-infos`, {
     key,
     page,
     rows,

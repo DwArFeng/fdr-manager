@@ -17,6 +17,7 @@
               class="input-with-select"
               v-model="pointId2Search"
               clearable
+              oninput="this.value=this.value.replace(/[^\d.]/g,'');"
             >
               <el-button
                 slot="append"
@@ -124,10 +125,18 @@
         :model="anchorFilterInfo"
         ref="createFilterInfoForm"
       >
+        <el-form-item label="过滤器ID" prop="key">
+          <el-input
+            v-model="anchorFilterInfo.key"
+            placeholder="请输入过滤器的主键，如不输入则自动生成"
+            oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="数据点ID" prop="pointKey">
           <el-input
             v-model="anchorFilterInfo.pointKey"
-            placeholder="请输入过滤器ID"
+            placeholder="请输入数据点ID"
+            oninput="this.value=this.value.replace(/[^\d.]/g,'');"
           ></el-input>
         </el-form-item>
         <el-form-item label="启用" prop="enabled">
@@ -152,7 +161,7 @@
         <el-form-item label="配置内容" prop="content">
           <el-input
             v-model="anchorFilterInfo.content"
-            placeholder="请输入过滤器备注"
+            placeholder="请输入过滤器配置内容"
             type="textarea"
             autosize
           ></el-input>
@@ -176,7 +185,7 @@
       <el-form
         label-width="80px"
         label-position="right"
-        :rules="createFilterInfoRules"
+        :rules="updateFilterInfoRules"
         status-icon
         :model="anchorFilterInfo"
         ref="updateFilterInfoForm"
@@ -216,7 +225,7 @@
         <el-form-item label="配置内容" prop="content">
           <el-input
             v-model="anchorFilterInfo.content"
-            placeholder="请输入过滤器备注"
+            placeholder="请输入过滤器配置内容"
             type="textarea"
             autosize
           ></el-input>
@@ -325,7 +334,7 @@
 
 <script>
 import {
-  all as allFilterInfo, childForPoint, insert, remove, update,
+  exists as existsFilterInfo, all as allFilterInfo, childForPoint, insert, remove, update,
 } from '../../api/filterInfo';
 import { exists as existsPoint } from '../../api/point';
 import {
@@ -356,6 +365,29 @@ export default {
           return null;
         });
     };
+    const validateFilterInfoNotExists = (rule, value, callback) => {
+      if (value === '') {
+        callback();
+      } else {
+        existsFilterInfo(value)
+          .then((res) => {
+            if (res.meta.code !== 0) {
+              callback(new Error('无法验证过滤器信息是否存在'));
+              return null;
+            }
+            if (res.data) {
+              callback(new Error('过滤器信息已经存在'));
+              return null;
+            }
+            callback();
+            return null;
+          })
+          .catch(() => {
+            callback(new Error('无法验证过滤器信息是否存在'));
+            return null;
+          });
+      }
+    };
 
     return {
       filterInfo: {},
@@ -376,6 +408,12 @@ export default {
         type: '',
       },
       createFilterInfoRules: {
+        key: [
+          {
+            validator: validateFilterInfoNotExists,
+            trigger: 'blur',
+          },
+        ],
         pointKey: [
           {
             required: true,
@@ -388,16 +426,16 @@ export default {
           {
             required: true,
             message: '请输入过滤器的类型',
-            trigger: 'blur',
+            trigger: ['change', 'blur'],
           },
         ],
       },
       updateFilterInfoRules: {
-        name: [
+        type: [
           {
             required: true,
-            message: '过滤器名称是过滤器重要的助记符，请指定有意义的值，以免与其它过滤器混淆',
-            trigger: 'blur',
+            message: '请输入过滤器的类型',
+            trigger: ['change', 'blur'],
           },
         ],
       },
@@ -518,6 +556,7 @@ export default {
           return;
         }
         insert(
+          this.anchorFilterInfo.key,
           this.anchorFilterInfo.pointKey,
           this.anchorFilterInfo.enabled,
           this.anchorFilterInfo.remark,

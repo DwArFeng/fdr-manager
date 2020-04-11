@@ -17,6 +17,7 @@
               class="input-with-select"
               v-model="pointId2Search"
               clearable
+              oninput="this.value=this.value.replace(/[^\d.]/g,'');"
             >
               <el-button
                 slot="append"
@@ -124,10 +125,18 @@
         :model="anchorTriggerInfo"
         ref="createTriggerInfoForm"
       >
+        <el-form-item label="触发器ID" prop="key">
+          <el-input
+            v-model="anchorTriggerInfo.key"
+            placeholder="请输入触发器的主键，如不输入则自动生成"
+            oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="数据点ID" prop="pointKey">
           <el-input
             v-model="anchorTriggerInfo.pointKey"
-            placeholder="请输入触发器ID"
+            placeholder="请输入数据点ID"
+            oninput="this.value=this.value.replace(/[^\d.]/g,'');"
           ></el-input>
         </el-form-item>
         <el-form-item label="启用" prop="enabled">
@@ -152,7 +161,7 @@
         <el-form-item label="配置内容" prop="content">
           <el-input
             v-model="anchorTriggerInfo.content"
-            placeholder="请输入触发器备注"
+            placeholder="请输入触发器配置内容"
             type="textarea"
             autosize
           ></el-input>
@@ -176,7 +185,7 @@
       <el-form
         label-width="80px"
         label-position="right"
-        :rules="createTriggerInfoRules"
+        :rules="updateTriggerInfoRules"
         status-icon
         :model="anchorTriggerInfo"
         ref="updateTriggerInfoForm"
@@ -216,7 +225,7 @@
         <el-form-item label="配置内容" prop="content">
           <el-input
             v-model="anchorTriggerInfo.content"
-            placeholder="请输入触发器备注"
+            placeholder="请输入触发器配置内容"
             type="textarea"
             autosize
           ></el-input>
@@ -325,7 +334,7 @@
 
 <script>
 import {
-  all as allTriggerInfo, childForPoint, insert, remove, update,
+  exists as existsTriggerInfo, all as allTriggerInfo, childForPoint, insert, remove, update,
 } from '../../api/triggerInfo';
 import { exists as existsPoint } from '../../api/point';
 import {
@@ -356,6 +365,29 @@ export default {
           return null;
         });
     };
+    const validateTriggerInfoNotExists = (rule, value, callback) => {
+      if (value === '') {
+        callback();
+      } else {
+        existsTriggerInfo(value)
+          .then((res) => {
+            if (res.meta.code !== 0) {
+              callback(new Error('无法验证触发器信息是否存在'));
+              return null;
+            }
+            if (res.data) {
+              callback(new Error('触发器信息已经存在'));
+              return null;
+            }
+            callback();
+            return null;
+          })
+          .catch(() => {
+            callback(new Error('无法验证触发器信息是否存在'));
+            return null;
+          });
+      }
+    };
 
     return {
       triggerInfo: {},
@@ -376,6 +408,12 @@ export default {
         type: '',
       },
       createTriggerInfoRules: {
+        key: [
+          {
+            validator: validateTriggerInfoNotExists,
+            trigger: 'blur',
+          },
+        ],
         pointKey: [
           {
             required: true,
@@ -388,16 +426,16 @@ export default {
           {
             required: true,
             message: '请输入触发器的类型',
-            trigger: 'blur',
+            trigger: ['change', 'blur'],
           },
         ],
       },
       updateTriggerInfoRules: {
-        name: [
+        type: [
           {
             required: true,
-            message: '触发器名称是触发器重要的助记符，请指定有意义的值，以免与其它触发器混淆',
-            trigger: 'blur',
+            message: '请输入触发器的类型',
+            trigger: ['change', 'blur'],
           },
         ],
       },
@@ -518,6 +556,7 @@ export default {
           return;
         }
         insert(
+          this.anchorTriggerInfo.key,
           this.anchorTriggerInfo.pointKey,
           this.anchorTriggerInfo.enabled,
           this.anchorTriggerInfo.remark,

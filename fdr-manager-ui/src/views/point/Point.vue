@@ -17,6 +17,7 @@
               class="input-with-select"
               v-model="id2Search"
               clearable
+              oninput="this.value=this.value.replace(/[^\d.]/g,'');"
             >
               <el-button slot="append" icon="el-icon-search" @click="handleIdSearch"></el-button>
             </el-input>
@@ -116,6 +117,13 @@
         status-icon
         :model="anchorPoint"
         ref="createPermissionForm">
+        <el-form-item label="ID" prop="key">
+          <el-input
+            v-model="anchorPoint.key"
+            placeholder="请输入数据点的主键，如不输入则自动生成"
+            oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input
             v-model="anchorPoint.name"
@@ -146,6 +154,7 @@
         <el-button type="primary" @click="handleCreate">确定</el-button>
       </div>
     </el-dialog>
+    <!-- 更新数据点对话框 -->
     <el-dialog
       title="更新数据点"
       :visible.sync="updatePermissionVisible"
@@ -202,6 +211,30 @@ import {
 export default {
   name: 'Permission',
   data() {
+    const validatePointNotExists = (rule, value, callback) => {
+      if (value === '') {
+        callback();
+      } else {
+        exists(value)
+          .then((res) => {
+            if (res.meta.code !== 0) {
+              callback(new Error('无法验证数据点是否存在'));
+              return null;
+            }
+            if (res.data) {
+              callback(new Error('数据点已经存在'));
+              return null;
+            }
+            callback();
+            return null;
+          })
+          .catch(() => {
+            callback(new Error('无法验证数据点是否存在'));
+            return null;
+          });
+      }
+    };
+
     return {
       point: {},
       pageSize: 15,
@@ -216,6 +249,12 @@ export default {
         remark: '',
       },
       createPermissionRules: {
+        key: [
+          {
+            validator: validatePointNotExists,
+            trigger: 'blur',
+          },
+        ],
         name: [
           {
             required: true,
@@ -307,6 +346,7 @@ export default {
           return;
         }
         insert(
+          this.anchorPoint.key,
           this.anchorPoint.name,
           this.anchorPoint.remark,
           this.anchorPoint.realtime_enabled,

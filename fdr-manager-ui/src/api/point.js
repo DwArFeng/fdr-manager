@@ -3,20 +3,20 @@ import {
 } from '../util/http';
 
 export function exists(key) {
-  return get('/point/exists', {
-    key,
-  });
+  return get(`/point/${key}/exists`, {});
 }
 
 export function inspect(key) {
-  return get('/point', {
-    key,
-  });
+  return get(`/point/${key}`, {});
 }
 
-export function insert(name, remark, realtimeEnabled, persistenceEnabled) {
+export function insert(key, name, remark, realtimeEnabled, persistenceEnabled) {
+  let finalKey = { long_id: key };
+  if (key === '') {
+    finalKey = null;
+  }
   return post('/point', {
-    key: null,
+    key: finalKey,
     remark,
     name,
     persistence_enabled: persistenceEnabled,
@@ -25,9 +25,7 @@ export function insert(name, remark, realtimeEnabled, persistenceEnabled) {
 }
 
 export function remove(key) {
-  return del('/point', {
-    key,
-  });
+  return del(`/point/${key}`, {});
 }
 
 export function update(key, name, remark, realtimeEnabled, persistenceEnabled) {
@@ -49,9 +47,9 @@ export function all(page, rows) {
   });
 }
 
-export function nameLike(name, page, rows) {
+export function nameLike(pattern, page, rows) {
   return get('/point/name-like', {
-    name,
+    pattern,
     page,
     rows,
   });

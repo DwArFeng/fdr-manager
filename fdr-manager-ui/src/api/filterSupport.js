@@ -1,15 +1,11 @@
 import { get } from '../util/http';
 
 export function exists(key) {
-  return get('/filter-support/exists', {
-    key,
-  });
+  return get(`/filter-support/${key}/exists`, {});
 }
 
 export function inspect(key) {
-  return get('/filter-support', {
-    key,
-  });
+  return get(`/filter-support/${key}`, {});
 }
 
 export function all(page, rows) {

@@ -1,15 +1,11 @@
 import { get } from '../util/http';
 
 export function exists(key) {
-  return get('/trigger-support/exists', {
-    key,
-  });
+  return get(`/trigger-support/${key}/exists`, {});
 }
 
 export function inspect(key) {
-  return get('/trigger-support', {
-    key,
-  });
+  return get(`/trigger-support/${key}`, {});
 }
 
 export function all(page, rows) {
