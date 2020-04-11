@@ -29,6 +29,10 @@ const routes = [
         component: () => import('../views/triggerSupport/TriggerSupport'),
       },
       {
+        path: 'mapper-support',
+        component: () => import('../views/mapperSupport/MapperSupport'),
+      },
+      {
         path: 'filter-info',
         component: () => import('../views/filterInfo/FilterInfo'),
       },

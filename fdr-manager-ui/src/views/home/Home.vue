@@ -36,34 +36,6 @@
                 <span>触发器管理</span>
               </template>
             </el-menu-item>
-            <!-- 实时数据值管理 -->
-            <el-menu-item index="/home/point">
-              <template slot="title">
-                <i class="el-icon-s-grid"></i>
-                <span>实时数据值管理</span>
-              </template>
-            </el-menu-item>
-            <!-- 持久数据值管理 -->
-            <el-menu-item index="/home/point">
-              <template slot="title">
-                <i class="el-icon-s-grid"></i>
-                <span>持久数据值管理</span>
-              </template>
-            </el-menu-item>
-            <!-- 过滤数据值管理 -->
-            <el-menu-item index="/home/point">
-              <template slot="title">
-                <i class="el-icon-s-grid"></i>
-                <span>过滤数据值管理</span>
-              </template>
-            </el-menu-item>
-            <!-- 触发数据值管理 -->
-            <el-menu-item index="/home/point">
-              <template slot="title">
-                <i class="el-icon-s-grid"></i>
-                <span>触发数据值管理</span>
-              </template>
-            </el-menu-item>
           </el-submenu>
           <!-- 数据支持 -->
           <el-submenu index="data_support">
@@ -83,6 +55,13 @@
               <template slot="title">
                 <i class="el-icon-s-grid"></i>
                 <span>触发器支持</span>
+              </template>
+            </el-menu-item>
+            <!-- 触发器支持 -->
+            <el-menu-item index="/home/mapper-support">
+              <template slot="title">
+                <i class="el-icon-s-grid"></i>
+                <span>映射器支持</span>
               </template>
             </el-menu-item>
           </el-submenu>
