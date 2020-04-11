@@ -32,5 +32,8 @@
     <dubbo:reference id="triggerSupportMaintainService"
                      interface="com.dwarfeng.fdr.stack.service.TriggerSupportMaintainService" retries="3"
                      timeout="1000"/>
+    <dubbo:reference id="mapperSupportMaintainService"
+                     interface="com.dwarfeng.fdr.stack.service.MapperSupportMaintainService" retries="3"
+                     timeout="1000"/>
     <dubbo:reference id="longIdService" interface="com.dwarfeng.sfds.stack.service.LongIdService"/>
 </beans>

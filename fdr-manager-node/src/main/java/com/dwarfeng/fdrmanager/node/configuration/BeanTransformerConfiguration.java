@@ -39,4 +39,9 @@ public class BeanTransformerConfiguration {
     public BeanTransformer<TriggerSupport, FastJsonTriggerSupport> triggerSupportFastJsonTriggerSupportBeanTransformer() {
         return new DozerBeanTransformer<>(TriggerSupport.class, FastJsonTriggerSupport.class, mapper);
     }
+
+    @Bean
+    public BeanTransformer<MapperSupport, FastJsonMapperSupport> mapperSupportFastJsonMapperSupportBeanTransformer() {
+        return new DozerBeanTransformer<>(MapperSupport.class, FastJsonMapperSupport.class, mapper);
+    }
 }
