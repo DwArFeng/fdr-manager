@@ -63,9 +63,9 @@
         >
         </el-table-column>
         <el-table-column
-          prop="example_content"
+          prop="args_illustrate"
           label="配置示例"
-          :formatter="exampleContentFormatter"
+          :formatter="argsIllustrateFormatter"
           width="100px">
         </el-table-column>
         <el-table-column label="操作" :width="150">
@@ -128,9 +128,9 @@
             :readonly="true"
           ></el-input>
         </el-form-item>
-        <el-form-item label="配置示例" prop="exampleContent">
+        <el-form-item label="配置示例" prop="argsIllustrate">
           <el-input
-            v-model="anchorMapperSupport.exampleContent"
+            v-model="anchorMapperSupport.argsIllustrate"
             type="textarea"
             autosize
             :readonly="true"
@@ -160,7 +160,7 @@ export default {
         key: '',
         label: '',
         description: '',
-        exampleContent: '',
+        argsIllustrate: '',
       },
       showDetailVisible: false,
       id2Search: '',
@@ -221,10 +221,10 @@ export default {
       this.anchorMapperSupport.key = row.key.string_id;
       this.anchorMapperSupport.label = row.label;
       this.anchorMapperSupport.description = row.description;
-      this.anchorMapperSupport.exampleContent = row.example_content;
+      this.anchorMapperSupport.argsIllustrate = row.args_illustrate;
       this.showDetailVisible = true;
     },
-    exampleContentFormatter() {
+    argsIllustrateFormatter() {
       return '见详细页面';
     },
     handleIdLikeSearch() {
