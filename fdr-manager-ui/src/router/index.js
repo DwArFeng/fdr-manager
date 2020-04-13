@@ -40,6 +40,10 @@ const routes = [
         path: 'trigger-info',
         component: () => import('../views/triggerInfo/TriggerInfo'),
       },
+      {
+        path: 'realtime-value',
+        component: () => import('../views/realtimeValue/RealtimeValue'),
+      },
     ],
   },
 ];

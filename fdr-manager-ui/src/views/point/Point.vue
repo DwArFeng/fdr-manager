@@ -171,7 +171,7 @@
             v-model="anchorPoint.key"
             :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="名称" prop="key">
+        <el-form-item label="名称" prop="name">
           <el-input
             v-model="anchorPoint.name"></el-input>
         </el-form-item>

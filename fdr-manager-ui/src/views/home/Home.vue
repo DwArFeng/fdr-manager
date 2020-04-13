@@ -72,28 +72,28 @@
               <span slot="title">数据查询</span>
             </template>
             <!-- 实时数据查询 -->
-            <el-menu-item index="/home/dashboard">
+            <el-menu-item index="/home/realtime-value">
               <template slot="title">
                 <i class="el-icon-s-grid"></i>
                 <span>实时数据查询</span>
               </template>
             </el-menu-item>
             <!-- 持久数据查询 -->
-            <el-menu-item index="/home/dashboard">
+            <el-menu-item index="/home/realtime-value">
               <template slot="title">
                 <i class="el-icon-s-grid"></i>
                 <span>持久数据查询</span>
               </template>
             </el-menu-item>
             <!-- 过滤数据查询 -->
-            <el-menu-item index="/home/dashboard">
+            <el-menu-item index="/home/realtime-value">
               <template slot="title">
                 <i class="el-icon-s-grid"></i>
                 <span>过滤数据查询</span>
               </template>
             </el-menu-item>
             <!-- 触发数据查询 -->
-            <el-menu-item index="/home/dashboard">
+            <el-menu-item index="/home/realtime-value">
               <template slot="title">
                 <i class="el-icon-s-grid"></i>
                 <span>触发数据查询</span>
