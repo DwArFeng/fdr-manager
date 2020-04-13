@@ -26,7 +26,8 @@ public class BeanTransformerConfiguration {
     }
 
     @Bean
-    public BeanTransformer<TriggerInfo, JSFixedFastJsonTriggerInfo> triggerInfoJSFixedFastJsonTriggerInfoBeanTransformer() {
+    public BeanTransformer<TriggerInfo, JSFixedFastJsonTriggerInfo>
+    triggerInfoJSFixedFastJsonTriggerInfoBeanTransformer() {
         return new DozerBeanTransformer<>(TriggerInfo.class, JSFixedFastJsonTriggerInfo.class, mapper);
     }
 
@@ -36,12 +37,19 @@ public class BeanTransformerConfiguration {
     }
 
     @Bean
-    public BeanTransformer<TriggerSupport, FastJsonTriggerSupport> triggerSupportFastJsonTriggerSupportBeanTransformer() {
+    public BeanTransformer<TriggerSupport, FastJsonTriggerSupport>
+    triggerSupportFastJsonTriggerSupportBeanTransformer() {
         return new DozerBeanTransformer<>(TriggerSupport.class, FastJsonTriggerSupport.class, mapper);
     }
 
     @Bean
     public BeanTransformer<MapperSupport, FastJsonMapperSupport> mapperSupportFastJsonMapperSupportBeanTransformer() {
         return new DozerBeanTransformer<>(MapperSupport.class, FastJsonMapperSupport.class, mapper);
+    }
+
+    @Bean
+    public BeanTransformer<RealtimeValue, JSFixedFastJsonRealtimeValue>
+    realtimeValueJSFixedFastJsonRealtimeValueBeanTransformer() {
+        return new DozerBeanTransformer<>(RealtimeValue.class, JSFixedFastJsonRealtimeValue.class, mapper);
     }
 }

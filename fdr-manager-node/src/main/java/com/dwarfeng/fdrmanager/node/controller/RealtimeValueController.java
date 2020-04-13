@@ -1,9 +1,9 @@
 package com.dwarfeng.fdrmanager.node.controller;
 
-import com.dwarfeng.fdr.sdk.bean.entity.JSFixedFastJsonPoint;
-import com.dwarfeng.fdr.sdk.bean.entity.WebInputPoint;
-import com.dwarfeng.fdr.stack.bean.entity.Point;
-import com.dwarfeng.fdrmanager.stack.service.PointResponseService;
+import com.dwarfeng.fdr.sdk.bean.entity.JSFixedFastJsonRealtimeValue;
+import com.dwarfeng.fdr.sdk.bean.entity.WebInputRealtimeValue;
+import com.dwarfeng.fdr.stack.bean.entity.RealtimeValue;
+import com.dwarfeng.fdrmanager.stack.service.RealtimeValueResponseService;
 import com.dwarfeng.subgrade.sdk.bean.dto.FastJsonResponseData;
 import com.dwarfeng.subgrade.sdk.bean.dto.JSFixedFastJsonPagedData;
 import com.dwarfeng.subgrade.sdk.bean.dto.PagingUtil;
@@ -25,24 +25,24 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 数据点控制器。
+ * 实时数据控制器。
  *
  * @author DwArFeng
- * @since alpha-0.0.1
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping("/api/v1")
-public class PointController {
+public class RealtimeValueController {
 
     @Autowired
-    private PointResponseService service;
+    private RealtimeValueResponseService service;
     @Autowired
     private ServiceExceptionMapper sem;
 
     @Autowired
-    private BeanTransformer<Point, JSFixedFastJsonPoint> beanTransformer;
+    private BeanTransformer<RealtimeValue, JSFixedFastJsonRealtimeValue> beanTransformer;
 
-    @GetMapping("/point/{id}/exists")
+    @GetMapping("/realtime-value/{id}/exists")
     @BehaviorAnalyse
     public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") long id) {
         try {
@@ -53,46 +53,46 @@ public class PointController {
         }
     }
 
-    @GetMapping("/point/{id}")
+    @GetMapping("/realtime-value/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPoint> get(HttpServletRequest request, @PathVariable("id") long id) {
+    public FastJsonResponseData<JSFixedFastJsonRealtimeValue> get(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            Point point = service.get(new LongIdKey(id));
-            return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPoint.of(point)));
+            RealtimeValue realtimeValue = service.get(new LongIdKey(id));
+            return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonRealtimeValue.of(realtimeValue)));
         } catch (Exception e) {
-            return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPoint.class, e, sem));
+            return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonRealtimeValue.class, e, sem));
         }
     }
 
-    @PostMapping("/point")
+    @PostMapping("/realtime-value")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<JSFixedFastJsonLongIdKey> insert(
             HttpServletRequest request,
-            @RequestBody @Validated(Insert.class) WebInputPoint point, BindingResult bindingResult) {
+            @RequestBody @Validated(Insert.class) WebInputRealtimeValue realtimeValue, BindingResult bindingResult) {
         try {
-            LongIdKey insert = service.insert(WebInputPoint.toStackBean(point));
+            LongIdKey insert = service.insert(WebInputRealtimeValue.toStackBean(realtimeValue));
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonLongIdKey.of(insert)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonLongIdKey.class, e, sem));
         }
     }
 
-    @PatchMapping("/point")
+    @PatchMapping("/realtime-value")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
             HttpServletRequest request,
-            @RequestBody @Validated WebInputPoint point, BindingResult bindingResult) {
+            @RequestBody @Validated WebInputRealtimeValue realtimeValue, BindingResult bindingResult) {
         try {
-            service.update(WebInputPoint.toStackBean(point));
+            service.update(WebInputRealtimeValue.toStackBean(realtimeValue));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @DeleteMapping("/point/{id}")
+    @DeleteMapping("/realtime-value/{id}")
     @BehaviorAnalyse
     public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") long id) {
         try {
@@ -103,27 +103,13 @@ public class PointController {
         }
     }
 
-    @GetMapping("/point/all")
+    @GetMapping("/realtime-value/all")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonPoint>> all(
+    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonRealtimeValue>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<Point> all = service.all(new PagingInfo(page, rows));
-            PagedData<JSFixedFastJsonPoint> transform = PagingUtil.transform(all, beanTransformer);
-            return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
-        } catch (Exception e) {
-            return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));
-        }
-    }
-
-    @GetMapping("/point/name-like")
-    @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonPoint>> nameLike(
-            HttpServletRequest request,
-            @RequestParam("pattern") String pattern, @RequestParam("page") int page, @RequestParam("rows") int rows) {
-        try {
-            PagedData<Point> all = service.nameLike(pattern, new PagingInfo(page, rows));
-            PagedData<JSFixedFastJsonPoint> transform = PagingUtil.transform(all, beanTransformer);
+            PagedData<RealtimeValue> all = service.all(new PagingInfo(page, rows));
+            PagedData<JSFixedFastJsonRealtimeValue> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));
