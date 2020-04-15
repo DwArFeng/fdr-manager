@@ -44,6 +44,10 @@ const routes = [
         path: 'realtime-value',
         component: () => import('../views/realtimeValue/RealtimeValue'),
       },
+      {
+        path: 'persistence-value',
+        component: () => import('../views/persistenceValue/PersistenceValue'),
+      },
     ],
   },
 ];

@@ -79,7 +79,7 @@
               </template>
             </el-menu-item>
             <!-- 持久数据查询 -->
-            <el-menu-item index="/home/realtime-value">
+            <el-menu-item index="/home/persistence-value">
               <template slot="title">
                 <i class="el-icon-s-grid"></i>
                 <span>持久数据查询</span>

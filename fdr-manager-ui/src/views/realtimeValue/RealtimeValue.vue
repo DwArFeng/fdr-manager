@@ -192,7 +192,6 @@ export default {
         ],
       },
       id2Search: '',
-      name2Search: '',
       timer: null,
       useTimer: true,
     };
