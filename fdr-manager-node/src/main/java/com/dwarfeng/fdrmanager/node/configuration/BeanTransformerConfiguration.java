@@ -52,4 +52,10 @@ public class BeanTransformerConfiguration {
     realtimeValueJSFixedFastJsonRealtimeValueBeanTransformer() {
         return new DozerBeanTransformer<>(RealtimeValue.class, JSFixedFastJsonRealtimeValue.class, mapper);
     }
+
+    @Bean
+    public BeanTransformer<PersistenceValue, JSFixedFastJsonPersistenceValue>
+    persistenceValueJSFixedFastJsonPersistenceValueBeanTransformer() {
+        return new DozerBeanTransformer<>(PersistenceValue.class, JSFixedFastJsonPersistenceValue.class, mapper);
+    }
 }

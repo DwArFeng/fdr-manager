@@ -11,7 +11,7 @@ import com.dwarfeng.subgrade.stack.service.Service;
  * 实时值响应服务。
  *
  * @author DwArFeng
- * @since alpha-0.0.1
+ * @since 1.0.0
  */
 public interface RealtimeValueResponseService extends Service {
 
@@ -36,19 +36,19 @@ public interface RealtimeValueResponseService extends Service {
     /**
      * 向服务中插入指定的实时值。
      *
-     * @param filterInfo 指定的实时值。
+     * @param realtimeValue 指定的实时值。
      * @return 插入后分配的新主键。
      * @throws ServiceException 服务异常。
      */
-    LongIdKey insert(RealtimeValue filterInfo) throws ServiceException;
+    LongIdKey insert(RealtimeValue realtimeValue) throws ServiceException;
 
     /**
      * 向服务中更新指定的实时值。
      *
-     * @param filterInfo 指定的实时值。
+     * @param realtimeValue 指定的实时值。
      * @throws ServiceException 服务异常。
      */
-    void update(RealtimeValue filterInfo) throws ServiceException;
+    void update(RealtimeValue realtimeValue) throws ServiceException;
 
     /**
      * 从服务中删除指定的主键对应的实时值。
