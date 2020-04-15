@@ -48,6 +48,14 @@ const routes = [
         path: 'persistence-value',
         component: () => import('../views/persistenceValue/PersistenceValue'),
       },
+      {
+        path: 'filtered-value',
+        component: () => import('../views/filteredValue/FilteredValue'),
+      },
+      {
+        path: 'triggered-value',
+        component: () => import('../views/triggeredValue/TriggeredValue'),
+      },
     ],
   },
 ];

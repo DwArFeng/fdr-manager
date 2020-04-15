@@ -4,22 +4,32 @@
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>管理服务</el-breadcrumb-item>
       <el-breadcrumb-item>数据查询</el-breadcrumb-item>
-      <el-breadcrumb-item>持久数据查询</el-breadcrumb-item>
+      <el-breadcrumb-item>触发数据查询</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片工作区 -->
     <el-card class="box-card">
       <!-- 搜索与添加区域 -->
       <div style="margin-top: 15px;">
         <el-row :gutter="20">
-          <el-col :span="10">
+          <el-col :span="7">
             <el-input
-              placeholder="请输入数据点ID，仅支持精确查询"
+              placeholder="请输入数据点ID或触发器ID，仅支持精确查询"
               class="input-with-select"
-              v-model="pointId2Search"
+              v-model="id2Search"
               clearable
               oninput="this.value=this.value.replace(/[^\d.]/g,'');"
             >
             </el-input>
+          </el-col>
+          <el-col :span="3">
+            <el-select v-model="idType" placeholder="请选择" class="search-row">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-col>
           <el-col :span="12">
             <el-date-picker
@@ -48,7 +58,7 @@
       </div>
       <!-- 表格 -->
       <el-table
-        :data="persistenceValue.data"
+        :data="triggeredValue.data"
         stripe
         style="width: 100%">
         <el-table-column
@@ -62,6 +72,11 @@
           width="180px">
         </el-table-column>
         <el-table-column
+          prop="trigger_key.long_id"
+          label="触发器ID"
+          width="180px">
+        </el-table-column>
+        <el-table-column
           prop="happened_date"
           label="发生时间"
           :formatter="timestampFormatter"
@@ -71,6 +86,11 @@
         <el-table-column
           prop="value"
           label="数据值"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="message"
+          label="信息"
         >
         </el-table-column>
         <el-table-column label="操作" :width="100">
@@ -93,7 +113,7 @@
               background
               layout="prev, pager, next"
               :page-size="pageSize"
-              :total="parseInt(persistenceValue.count)"
+              :total="parseInt(triggeredValue.count)"
               :hide-on-single-page="true"
               :current-page.sync="currentPage"
               @current-change="onPageChanged">
@@ -112,17 +132,23 @@
         label-position="right"
         :rules="updatePermissionRules"
         status-icon
-        :model="anchorPersistenceValue"
+        :model="anchorTriggeredValue"
         ref="detailForm">
         <el-form-item label="ID" prop="key">
           <el-input
-            v-model="anchorPersistenceValue.key"
+            v-model="anchorTriggeredValue.key"
             :disabled="true"
           ></el-input>
         </el-form-item>
         <el-form-item label="数据点ID" prop="pointKey">
           <el-input
-            v-model="anchorPersistenceValue.point_key"
+            v-model="anchorTriggeredValue.point_key"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="触发器ID" prop="triggerKey">
+          <el-input
+            v-model="anchorTriggeredValue.trigger_key"
             :disabled="true"
           ></el-input>
         </el-form-item>
@@ -135,7 +161,15 @@
         </el-form-item>
         <el-form-item label="数据值" prop="value">
           <el-input
-            v-model="anchorPersistenceValue.value"
+            v-model="anchorTriggeredValue.value"
+            type="textarea"
+            autosize
+            :readonly="true"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="信息" prop="message">
+          <el-input
+            v-model="anchorTriggeredValue.message"
             type="textarea"
             autosize
             :readonly="true"
@@ -152,12 +186,13 @@
 <script>
 import {
   exists, inspect, all, allBetween, childForPoint, childForPointBetween,
-} from '../../api/persistenceValue';
+  childForTrigger, childForTriggerBetween,
+} from '../../api/triggeredValue';
 
 export default {
   name: 'Permission',
   data() {
-    const validatePersistenceValueNotExists = (rule, value, callback) => {
+    const validateTriggeredValueNotExists = (rule, value, callback) => {
       if (value === '') {
         callback();
       } else {
@@ -182,20 +217,22 @@ export default {
     };
 
     return {
-      persistenceValue: {},
+      triggeredValue: {},
       pageSize: 15,
       currentPage: 1,
       detailVisible: false,
-      anchorPersistenceValue: {
+      anchorTriggeredValue: {
         key: '',
         point_key: '',
+        trigger_key: '',
         happened_date: '',
         value: '',
+        message: '',
       },
       createPermissionRules: {
         key: [
           {
-            validator: validatePersistenceValueNotExists,
+            validator: validateTriggeredValueNotExists,
             trigger: 'blur',
           },
         ],
@@ -216,7 +253,7 @@ export default {
           },
         ],
       },
-      pointId2Search: '',
+      id2Search: '',
       pickerOptions: {
         shortcuts: [
           {
@@ -276,6 +313,17 @@ export default {
         ],
       },
       dateRange: null,
+      options: [
+        {
+          value: 'point',
+          label: '数据点',
+        },
+        {
+          value: 'trigger',
+          label: '触发器',
+        },
+      ],
+      idType: 'point',
     };
   },
   created() {
@@ -300,7 +348,7 @@ export default {
           if (res.data.current_page >= res.data.total_pages && res.data.total_pages > 0) {
             return all(res.data.total_pages - 1, this.pageSize);
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         })
@@ -319,7 +367,7 @@ export default {
             });
             return null;
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         });
@@ -340,7 +388,7 @@ export default {
             return allBetween(this.dateRange[0], this.dateRange[1], res.data.total_pages - 1,
               this.pageSize);
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         })
@@ -359,13 +407,13 @@ export default {
             });
             return null;
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         });
     },
     lookupChildForPoint() {
-      childForPoint(this.pointId2Search, this.currentPage - 1, this.pageSize)
+      childForPoint(this.id2Search, this.currentPage - 1, this.pageSize)
         .then((res) => {
           if (res.meta.code !== 0) {
             this.$message({
@@ -377,9 +425,9 @@ export default {
           }
           // 当查询的页数大于总页数，自动查询最后一页。
           if (res.data.current_page >= res.data.total_pages && res.data.total_pages > 0) {
-            return childForPoint(this.pointId2Search, res.data.total_pages - 1, this.pageSize);
+            return childForPoint(this.id2Search, res.data.total_pages - 1, this.pageSize);
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         })
@@ -398,16 +446,15 @@ export default {
             });
             return null;
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         });
     },
     lookupChildForPointBetween() {
-      childForPointBetween(this.pointId2Search, this.dateRange[0], this.dateRange[1],
+      childForPointBetween(this.id2Search, this.dateRange[0], this.dateRange[1],
         this.currentPage - 1, this.pageSize)
         .then((res) => {
-          console.log(res);
           if (res.meta.code !== 0) {
             this.$message({
               showClose: true,
@@ -418,10 +465,10 @@ export default {
           }
           // 当查询的页数大于总页数，自动查询最后一页。
           if (res.data.current_page >= res.data.total_pages && res.data.total_pages > 0) {
-            return childForPointBetween(this.pointId2Search, this.dateRange[0], this.dateRange[1],
+            return childForPointBetween(this.id2Search, this.dateRange[0], this.dateRange[1],
               res.data.total_pages - 1, this.pageSize);
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         })
@@ -440,30 +487,122 @@ export default {
             });
             return null;
           }
-          this.persistenceValue = res.data;
+          this.triggeredValue = res.data;
+          this.currentPage = res.data.current_page + 1;
+          return null;
+        });
+    },
+    lookupChildForTrigger() {
+      childForTrigger(this.id2Search, this.currentPage - 1, this.pageSize)
+        .then((res) => {
+          if (res.meta.code !== 0) {
+            this.$message({
+              showClose: true,
+              message: '请求异常，请稍后再试',
+              center: true,
+            });
+            return null;
+          }
+          // 当查询的页数大于总页数，自动查询最后一页。
+          if (res.data.current_page >= res.data.total_pages && res.data.total_pages > 0) {
+            return childForTrigger(this.id2Search, res.data.total_pages - 1, this.pageSize);
+          }
+          this.triggeredValue = res.data;
+          this.currentPage = res.data.current_page + 1;
+          return null;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .then((res) => {
+          if (res == null) {
+            return null;
+          }
+          if (res.meta.code !== 0) {
+            this.$message({
+              showClose: true,
+              message: '请求异常，请稍后再试',
+              center: true,
+            });
+            return null;
+          }
+          this.triggeredValue = res.data;
+          this.currentPage = res.data.current_page + 1;
+          return null;
+        });
+    },
+    lookupChildForTriggerBetween() {
+      childForTriggerBetween(this.id2Search, this.dateRange[0], this.dateRange[1],
+        this.currentPage - 1, this.pageSize)
+        .then((res) => {
+          if (res.meta.code !== 0) {
+            this.$message({
+              showClose: true,
+              message: '请求异常，请稍后再试',
+              center: true,
+            });
+            return null;
+          }
+          // 当查询的页数大于总页数，自动查询最后一页。
+          if (res.data.current_page >= res.data.total_pages && res.data.total_pages > 0) {
+            return childForTriggerBetween(this.id2Search, this.dateRange[0], this.dateRange[1],
+              res.data.total_pages - 1, this.pageSize);
+          }
+          this.triggeredValue = res.data;
+          this.currentPage = res.data.current_page + 1;
+          return null;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .then((res) => {
+          if (res == null) {
+            return null;
+          }
+          if (res.meta.code !== 0) {
+            this.$message({
+              showClose: true,
+              message: '请求异常，请稍后再试',
+              center: true,
+            });
+            return null;
+          }
+          this.triggeredValue = res.data;
           this.currentPage = res.data.current_page + 1;
           return null;
         });
     },
     handleSearch() {
-      if (this.pointId2Search === '' && this.dateRange == null) {
+      if (this.idType === 'point') {
+        if (this.id2Search === '' && this.dateRange == null) {
+          this.lookupAll();
+        } else if (this.id2Search === '' && this.dateRange != null) {
+          this.lookupAllBetween();
+        } else if (this.id2Search !== '' && this.dateRange == null) {
+          this.lookupChildForPoint();
+        } else if (this.id2Search !== '' && this.dateRange != null) {
+          this.lookupChildForPointBetween();
+        }
+      } else if (this.id2Search === '' && this.dateRange == null) {
         this.lookupAll();
-      } else if (this.pointId2Search === '' && this.dateRange != null) {
+      } else if (this.id2Search === '' && this.dateRange != null) {
         this.lookupAllBetween();
-      } else if (this.pointId2Search !== '' && this.dateRange == null) {
-        this.lookupChildForPoint();
-      } else if (this.pointId2Search !== '' && this.dateRange != null) {
-        this.lookupChildForPointBetween();
+      } else if (this.id2Search !== '' && this.dateRange == null) {
+        this.lookupChildForTrigger();
+      } else if (this.id2Search !== '' && this.dateRange != null) {
+        this.lookupChildForTriggerBetween();
       }
     },
     handleShowDetailDialog(row) {
       if (this.$refs.detailForm !== undefined) {
         this.$refs.detailForm.resetFields();
       }
-      this.anchorPersistenceValue.key = row.key.long_id;
-      this.anchorPersistenceValue.point_key = row.point_key.long_id;
-      this.anchorPersistenceValue.happened_date = row.happened_date;
-      this.anchorPersistenceValue.value = row.value;
+      this.anchorTriggeredValue.key = row.key.long_id;
+      this.anchorTriggeredValue.point_key = row.point_key.long_id;
+      this.anchorTriggeredValue.trigger_key = row.trigger_key.long_id;
+      this.anchorTriggeredValue.happened_date = row.happened_date;
+      this.anchorTriggeredValue.value = row.value;
+      this.anchorTriggeredValue.message = row.message;
       this.detailVisible = true;
     },
     timestampFormatter(row) {
@@ -481,14 +620,14 @@ export default {
     refreshTimer() {
       if (this.useTimer && this.detailVisible) {
         this.timer = setInterval(() => {
-          inspect(this.anchorPersistenceValue.key)
+          inspect(this.anchorTriggeredValue.key)
             .then((res) => {
               if (res.meta.code !== 0) {
                 return null;
               }
-              this.anchorPersistenceValue.key = res.data.key.long_id;
-              this.anchorPersistenceValue.happened_date = res.data.happened_date;
-              this.anchorPersistenceValue.value = res.data.value;
+              this.anchorTriggeredValue.key = res.data.key.long_id;
+              this.anchorTriggeredValue.happened_date = res.data.happened_date;
+              this.anchorTriggeredValue.value = res.data.value;
               return null;
             }).catch(() => null);
         }, 1000);
@@ -499,7 +638,7 @@ export default {
   },
   computed: {
     formattedDate() {
-      const timestamp = this.anchorPersistenceValue.happened_date;
+      const timestamp = this.anchorTriggeredValue.happened_date;
       // 时间戳为10位需*1000，时间戳为13位的话不需乘1000 var date = new Date(timestamp*1000);
       const date = new Date(timestamp);
       const Y = `${date.getFullYear()}-`;
@@ -519,7 +658,7 @@ export default {
     text-align: center;
   }
 
-  .search-row{
+  .search-row {
     width: 100%;
   }
 </style>
