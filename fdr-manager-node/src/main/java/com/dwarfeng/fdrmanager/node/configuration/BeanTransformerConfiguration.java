@@ -58,4 +58,16 @@ public class BeanTransformerConfiguration {
     persistenceValueJSFixedFastJsonPersistenceValueBeanTransformer() {
         return new DozerBeanTransformer<>(PersistenceValue.class, JSFixedFastJsonPersistenceValue.class, mapper);
     }
+
+    @Bean
+    public BeanTransformer<FilteredValue, JSFixedFastJsonFilteredValue>
+    filteredValueJSFixedFastJsonFilteredValueBeanTransformer() {
+        return new DozerBeanTransformer<>(FilteredValue.class, JSFixedFastJsonFilteredValue.class, mapper);
+    }
+
+    @Bean
+    public BeanTransformer<TriggeredValue, JSFixedFastJsonTriggeredValue>
+    triggeredValueJSFixedFastJsonTriggeredValueBeanTransformer() {
+        return new DozerBeanTransformer<>(TriggeredValue.class, JSFixedFastJsonTriggeredValue.class, mapper);
+    }
 }
