@@ -66,6 +66,11 @@ yarn-debug.log*
 yarn-error.log*
 
 #################
+## Maven Npm Files
+#################
+/fdr-manager-ui/node/
+
+#################
 ## Logger Files
 #################
 /fdr-manager-impl/logs/
