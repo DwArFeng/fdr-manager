@@ -5,13 +5,12 @@ import Vue from 'vue';
 const API_PREFIX = '/api';
 const VERSION_PREFIX = '/v1';
 let urlPrefix;
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
   urlPrefix = 'http://localhost:8080/fdr_manager_node_war_exploded';
 } else if (process.env.NODE_ENV === 'debug') {
-  urlPrefix = 'https://www.ceshi.com';
+  urlPrefix = 'https://www.debug.com';
 } else if (process.env.NODE_ENV === 'production') {
-  urlPrefix = 'https://www.production.com';
+  urlPrefix = 'http://10.10.10.30:8080/fdr-manager';
 }
 axios.defaults.baseURL = urlPrefix + API_PREFIX + VERSION_PREFIX;
 
@@ -45,9 +44,7 @@ axios.interceptors.response.use(
     return Promise.reject(response);
   },
   // 服务器状态码不是200的情况
-  (error) => {
-    console.log('error...');
-    console.log(error);
+  () => {
   },
 );
 

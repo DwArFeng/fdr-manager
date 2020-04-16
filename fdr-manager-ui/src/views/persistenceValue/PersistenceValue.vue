@@ -143,7 +143,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="this.detailVisible = false">关闭</el-button>
+        <el-button type="primary" @click="detailVisible = false">关闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -305,7 +305,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {
@@ -345,7 +351,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {
@@ -384,7 +396,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {
@@ -407,7 +425,6 @@ export default {
       childForPointBetween(this.pointId2Search, this.dateRange[0], this.dateRange[1],
         this.currentPage - 1, this.pageSize)
         .then((res) => {
-          console.log(res);
           if (res.meta.code !== 0) {
             this.$message({
               showClose: true,
@@ -426,7 +443,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {

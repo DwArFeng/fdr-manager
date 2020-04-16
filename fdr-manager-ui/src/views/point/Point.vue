@@ -303,7 +303,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {
@@ -329,7 +335,6 @@ export default {
       if (this.$refs.updatePermissionForm !== undefined) {
         this.$refs.updatePermissionForm.resetFields();
       }
-      console.log(row);
       this.anchorPoint.key = row.key.long_id;
       this.anchorPoint.name = row.name;
       this.anchorPoint.realtime_enabled = row.realtime_enabled;
@@ -373,10 +378,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -420,10 +424,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -432,16 +435,19 @@ export default {
       });
     },
     handleDelete(key) {
-      this.$confirm('此操作将永久删除此数据点,同时永久删除属于该数据点的所有配置和历史数据, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除此数据点。<br>'
+        + '删除数据点时会同时删除数据点的过滤器设置和触发器设置，但不会一并移除与此数据点相关数据。<br>'
+        + '<b>我们强联建议您只是将数据点的实时数据记录和持久数据记录禁用，同时禁用所有的过滤器以及触发器，'
+        + '而不是删除数据点。</b><br>'
+        + '是否继续?',
+      '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
         type: 'warning',
       })
         .then(() => remove(key))
-        .catch(() => {
-          console.log('123456789');
-          return Promise.reject(new Error('canceled'));
-        })
+        .catch(() => Promise.reject(new Error('canceled')))
         .then((res) => {
           if (res.meta.code !== 0) {
             this.$message({
@@ -460,14 +466,12 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
           if (err.message === 'canceled') {
             return null;
           }
-          console.log(err);
           this.$message({
             showClose: true,
-            message: '服务器通信失败',
+            message: `通信错误，异常信息: ${err.message}`,
             type: 'error',
             center: true,
           });
@@ -498,10 +502,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -549,10 +552,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });

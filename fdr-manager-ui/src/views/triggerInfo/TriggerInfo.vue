@@ -474,7 +474,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {
@@ -513,7 +519,13 @@ export default {
           return null;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message({
+            showClose: true,
+            message: `通信错误，异常信息: ${err.message}`,
+            type: 'error',
+            center: true,
+          });
+          return null;
         })
         .then((res) => {
           if (res == null) {
@@ -584,10 +596,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -632,10 +643,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -675,10 +685,9 @@ export default {
           if (err.message === 'canceled') {
             return null;
           }
-          console.log(err);
           this.$message({
             showClose: true,
-            message: '服务器通信失败',
+            message: `通信错误，异常信息: ${err.message}`,
             type: 'error',
             center: true,
           });
@@ -704,10 +713,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -759,10 +767,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -789,10 +796,9 @@ export default {
             return null;
           })
           .catch((err) => {
-            console.log(err);
             this.$message({
               showClose: true,
-              message: '服务器通信失败',
+              message: `通信错误，异常信息: ${err.message}`,
               type: 'error',
               center: true,
             });
@@ -801,7 +807,6 @@ export default {
       }
     },
     handleSupportSelected(row) {
-      console.log(row);
       this.anchorTriggerInfo.type = row.key.string_id;
       this.anchorTriggerInfo.content = row.example_content;
       this.selectTriggerSupportVisible = false;
