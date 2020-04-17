@@ -1,4 +1,4 @@
-package com.dwarfeng.fdrmanager.node.controller;
+package com.dwarfeng.fdrmanager.node.controller.v1;
 
 import com.dwarfeng.fdr.sdk.bean.entity.JSFixedFastJsonPersistenceValue;
 import com.dwarfeng.fdr.sdk.bean.entity.WebInputPersistenceValue;

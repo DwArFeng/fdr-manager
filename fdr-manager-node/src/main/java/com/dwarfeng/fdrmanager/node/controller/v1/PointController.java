@@ -1,9 +1,9 @@
-package com.dwarfeng.fdrmanager.node.controller;
+package com.dwarfeng.fdrmanager.node.controller.v1;
 
-import com.dwarfeng.fdr.sdk.bean.entity.JSFixedFastJsonFilterInfo;
-import com.dwarfeng.fdr.sdk.bean.entity.WebInputFilterInfo;
-import com.dwarfeng.fdr.stack.bean.entity.FilterInfo;
-import com.dwarfeng.fdrmanager.stack.service.FilterInfoResponseService;
+import com.dwarfeng.fdr.sdk.bean.entity.JSFixedFastJsonPoint;
+import com.dwarfeng.fdr.sdk.bean.entity.WebInputPoint;
+import com.dwarfeng.fdr.stack.bean.entity.Point;
+import com.dwarfeng.fdrmanager.stack.service.PointResponseService;
 import com.dwarfeng.subgrade.sdk.bean.dto.FastJsonResponseData;
 import com.dwarfeng.subgrade.sdk.bean.dto.JSFixedFastJsonPagedData;
 import com.dwarfeng.subgrade.sdk.bean.dto.PagingUtil;
@@ -25,24 +25,24 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 过滤器信息控制器。
+ * 数据点控制器。
  *
  * @author DwArFeng
  * @since alpha-0.0.1
  */
 @RestController
 @RequestMapping("/api/v1")
-public class FilterInfoController {
+public class PointController {
 
     @Autowired
-    private FilterInfoResponseService service;
+    private PointResponseService service;
     @Autowired
     private ServiceExceptionMapper sem;
 
     @Autowired
-    private BeanTransformer<FilterInfo, JSFixedFastJsonFilterInfo> beanTransformer;
+    private BeanTransformer<Point, JSFixedFastJsonPoint> beanTransformer;
 
-    @GetMapping("/filter-info/{id}/exists")
+    @GetMapping("/point/{id}/exists")
     @BehaviorAnalyse
     public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") long id) {
         try {
@@ -53,46 +53,46 @@ public class FilterInfoController {
         }
     }
 
-    @GetMapping("/filter-info/{id}")
+    @GetMapping("/point/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonFilterInfo> get(HttpServletRequest request, @PathVariable("id") long id) {
+    public FastJsonResponseData<JSFixedFastJsonPoint> get(HttpServletRequest request, @PathVariable("id") long id) {
         try {
-            FilterInfo filterInfo = service.get(new LongIdKey(id));
-            return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonFilterInfo.of(filterInfo)));
+            Point point = service.get(new LongIdKey(id));
+            return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPoint.of(point)));
         } catch (Exception e) {
-            return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonFilterInfo.class, e, sem));
+            return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPoint.class, e, sem));
         }
     }
 
-    @PostMapping("/filter-info")
+    @PostMapping("/point")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<JSFixedFastJsonLongIdKey> insert(
             HttpServletRequest request,
-            @RequestBody @Validated(Insert.class) WebInputFilterInfo filterInfo, BindingResult bindingResult) {
+            @RequestBody @Validated(Insert.class) WebInputPoint point, BindingResult bindingResult) {
         try {
-            LongIdKey insert = service.insert(WebInputFilterInfo.toStackBean(filterInfo));
+            LongIdKey insert = service.insert(WebInputPoint.toStackBean(point));
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonLongIdKey.of(insert)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonLongIdKey.class, e, sem));
         }
     }
 
-    @PatchMapping("/filter-info")
+    @PatchMapping("/point")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
             HttpServletRequest request,
-            @RequestBody @Validated WebInputFilterInfo filterInfo, BindingResult bindingResult) {
+            @RequestBody @Validated WebInputPoint point, BindingResult bindingResult) {
         try {
-            service.update(WebInputFilterInfo.toStackBean(filterInfo));
+            service.update(WebInputPoint.toStackBean(point));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @DeleteMapping("/filter-info/{id}")
+    @DeleteMapping("/point/{id}")
     @BehaviorAnalyse
     public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") long id) {
         try {
@@ -103,27 +103,27 @@ public class FilterInfoController {
         }
     }
 
-    @GetMapping("/filter-info/all")
+    @GetMapping("/point/all")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonFilterInfo>> all(
+    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonPoint>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<FilterInfo> all = service.all(new PagingInfo(page, rows));
-            PagedData<JSFixedFastJsonFilterInfo> transform = PagingUtil.transform(all, beanTransformer);
+            PagedData<Point> all = service.all(new PagingInfo(page, rows));
+            PagedData<JSFixedFastJsonPoint> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));
         }
     }
 
-    @GetMapping("/point/{pointId}/filter-infos")
+    @GetMapping("/point/name-like")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonFilterInfo>> childForPoint(
+    public FastJsonResponseData<JSFixedFastJsonPagedData<JSFixedFastJsonPoint>> nameLike(
             HttpServletRequest request,
-            @PathVariable("pointId") long pointId, @RequestParam("page") int page, @RequestParam("rows") int rows) {
+            @RequestParam("pattern") String pattern, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<FilterInfo> all = service.childForPoint(new LongIdKey(pointId), new PagingInfo(page, rows));
-            PagedData<JSFixedFastJsonFilterInfo> transform = PagingUtil.transform(all, beanTransformer);
+            PagedData<Point> all = service.nameLike(pattern, new PagingInfo(page, rows));
+            PagedData<JSFixedFastJsonPoint> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));

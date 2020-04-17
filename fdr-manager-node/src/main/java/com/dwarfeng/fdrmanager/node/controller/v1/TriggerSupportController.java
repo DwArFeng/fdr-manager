@@ -1,9 +1,9 @@
-package com.dwarfeng.fdrmanager.node.controller;
+package com.dwarfeng.fdrmanager.node.controller.v1;
 
-import com.dwarfeng.fdr.sdk.bean.entity.FastJsonMapperSupport;
-import com.dwarfeng.fdr.sdk.bean.entity.WebInputMapperSupport;
-import com.dwarfeng.fdr.stack.bean.entity.MapperSupport;
-import com.dwarfeng.fdrmanager.stack.service.MapperSupportResponseService;
+import com.dwarfeng.fdr.sdk.bean.entity.FastJsonTriggerSupport;
+import com.dwarfeng.fdr.sdk.bean.entity.WebInputTriggerSupport;
+import com.dwarfeng.fdr.stack.bean.entity.TriggerSupport;
+import com.dwarfeng.fdrmanager.stack.service.TriggerSupportResponseService;
 import com.dwarfeng.subgrade.sdk.bean.dto.FastJsonResponseData;
 import com.dwarfeng.subgrade.sdk.bean.dto.JSFixedFastJsonPagedData;
 import com.dwarfeng.subgrade.sdk.bean.dto.PagingUtil;
@@ -32,17 +32,17 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/api/v1")
-public class MapperSupportController {
+public class TriggerSupportController {
 
     @Autowired
-    private MapperSupportResponseService service;
+    private TriggerSupportResponseService service;
     @Autowired
     private ServiceExceptionMapper sem;
 
     @Autowired
-    private BeanTransformer<MapperSupport, FastJsonMapperSupport> beanTransformer;
+    private BeanTransformer<TriggerSupport, FastJsonTriggerSupport> beanTransformer;
 
-    @GetMapping("/mapper-support/{id}/exists")
+    @GetMapping("/trigger-support/{id}/exists")
     @BehaviorAnalyse
     public FastJsonResponseData<Boolean> exists(HttpServletRequest request, @PathVariable("id") String id) {
         try {
@@ -53,46 +53,46 @@ public class MapperSupportController {
         }
     }
 
-    @GetMapping("/mapper-support/{id}")
+    @GetMapping("/trigger-support/{id}")
     @BehaviorAnalyse
-    public FastJsonResponseData<FastJsonMapperSupport> get(HttpServletRequest request, @PathVariable("id") String id) {
+    public FastJsonResponseData<FastJsonTriggerSupport> get(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            MapperSupport mapperSupport = service.get(new StringIdKey(id));
-            return FastJsonResponseData.of(ResponseDataUtil.good(FastJsonMapperSupport.of(mapperSupport)));
+            TriggerSupport triggerSupport = service.get(new StringIdKey(id));
+            return FastJsonResponseData.of(ResponseDataUtil.good(FastJsonTriggerSupport.of(triggerSupport)));
         } catch (Exception e) {
-            return FastJsonResponseData.of(ResponseDataUtil.bad(FastJsonMapperSupport.class, e, sem));
+            return FastJsonResponseData.of(ResponseDataUtil.bad(FastJsonTriggerSupport.class, e, sem));
         }
     }
 
-    @PostMapping("/mapper-support")
+    @PostMapping("/trigger-support")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<FastJsonStringIdKey> insert(
             HttpServletRequest request,
-            @RequestBody @Validated(Insert.class) WebInputMapperSupport mapperSupport, BindingResult bindingResult) {
+            @RequestBody @Validated(Insert.class) WebInputTriggerSupport triggerSupport, BindingResult bindingResult) {
         try {
-            StringIdKey insert = service.insert(WebInputMapperSupport.toStackBean(mapperSupport));
+            StringIdKey insert = service.insert(WebInputTriggerSupport.toStackBean(triggerSupport));
             return FastJsonResponseData.of(ResponseDataUtil.good(FastJsonStringIdKey.of(insert)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(FastJsonStringIdKey.class, e, sem));
         }
     }
 
-    @PatchMapping("/mapper-support")
+    @PatchMapping("/trigger-support")
     @BehaviorAnalyse
     @BindingCheck
     public FastJsonResponseData<Object> update(
             HttpServletRequest request,
-            @RequestBody @Validated WebInputMapperSupport mapperSupport, BindingResult bindingResult) {
+            @RequestBody @Validated WebInputTriggerSupport triggerSupport, BindingResult bindingResult) {
         try {
-            service.update(WebInputMapperSupport.toStackBean(mapperSupport));
+            service.update(WebInputTriggerSupport.toStackBean(triggerSupport));
             return FastJsonResponseData.of(ResponseDataUtil.good(null));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(Object.class, e, sem));
         }
     }
 
-    @DeleteMapping("/mapper-support/{id}")
+    @DeleteMapping("/trigger-support/{id}")
     @BehaviorAnalyse
     public FastJsonResponseData<Object> delete(HttpServletRequest request, @PathVariable("id") String id) {
         try {
@@ -103,41 +103,41 @@ public class MapperSupportController {
         }
     }
 
-    @GetMapping("/mapper-support/all")
+    @GetMapping("/trigger-support/all")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonMapperSupport>> all(
+    public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonTriggerSupport>> all(
             HttpServletRequest request, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<MapperSupport> all = service.all(new PagingInfo(page, rows));
-            PagedData<FastJsonMapperSupport> transform = PagingUtil.transform(all, beanTransformer);
+            PagedData<TriggerSupport> all = service.all(new PagingInfo(page, rows));
+            PagedData<FastJsonTriggerSupport> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));
         }
     }
 
-    @GetMapping("/mapper-support/id-like")
+    @GetMapping("/trigger-support/id-like")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonMapperSupport>> idLike(
+    public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonTriggerSupport>> idLike(
             HttpServletRequest request,
             @RequestParam("pattern") String pattern, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<MapperSupport> all = service.idLike(pattern, new PagingInfo(page, rows));
-            PagedData<FastJsonMapperSupport> transform = PagingUtil.transform(all, beanTransformer);
+            PagedData<TriggerSupport> all = service.idLike(pattern, new PagingInfo(page, rows));
+            PagedData<FastJsonTriggerSupport> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));
         }
     }
 
-    @GetMapping("/mapper-support/label-like")
+    @GetMapping("/trigger-support/label-like")
     @BehaviorAnalyse
-    public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonMapperSupport>> labelLike(
+    public FastJsonResponseData<JSFixedFastJsonPagedData<FastJsonTriggerSupport>> labelLike(
             HttpServletRequest request,
             @RequestParam("pattern") String pattern, @RequestParam("page") int page, @RequestParam("rows") int rows) {
         try {
-            PagedData<MapperSupport> all = service.labelLike(pattern, new PagingInfo(page, rows));
-            PagedData<FastJsonMapperSupport> transform = PagingUtil.transform(all, beanTransformer);
+            PagedData<TriggerSupport> all = service.labelLike(pattern, new PagingInfo(page, rows));
+            PagedData<FastJsonTriggerSupport> transform = PagingUtil.transform(all, beanTransformer);
             return FastJsonResponseData.of(ResponseDataUtil.good(JSFixedFastJsonPagedData.of(transform)));
         } catch (Exception e) {
             return FastJsonResponseData.of(ResponseDataUtil.bad(JSFixedFastJsonPagedData.class, e, sem));

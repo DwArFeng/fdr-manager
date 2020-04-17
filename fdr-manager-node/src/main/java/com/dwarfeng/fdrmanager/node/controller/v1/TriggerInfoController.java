@@ -1,4 +1,4 @@
-package com.dwarfeng.fdrmanager.node.controller;
+package com.dwarfeng.fdrmanager.node.controller.v1;
 
 import com.dwarfeng.fdr.sdk.bean.entity.JSFixedFastJsonTriggerInfo;
 import com.dwarfeng.fdr.sdk.bean.entity.WebInputTriggerInfo;

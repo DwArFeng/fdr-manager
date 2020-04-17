@@ -19,9 +19,7 @@
 
     <!--静态资源映射-->
     <!--本项目把静态资源放在了WEB-INF的statics目录下，资源映射如下-->
-    <mvc:resources mapping="/assets/css/**" location="/WEB-INF/assets/css/"/>
-    <!--    <mvc:resources mapping="/js/**" location="/WEB-INF/statics/json/"/>-->
-    <!--    <mvc:resources mapping="/image/**" location="/WEB-INF/statics/image/"/>-->
+    <mvc:resources mapping="/ui/**" location="/WEB-INF/ui/"/>
 
     <!-- 开启SpringMVC注解模式 -->
     <mvc:annotation-driven>
