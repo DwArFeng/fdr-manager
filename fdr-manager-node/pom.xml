@@ -13,7 +13,7 @@
     <packaging>war</packaging>
 
     <artifactId>fdr-manager-node</artifactId>
-    <name>fdr-manager-node Maven Webapp</name>
+    <name>fdr-manager-node</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -169,6 +169,29 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/${project.name}-${project.version}/WEB-INF/ui
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../fdr-manager-ui/dist</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Maven 清理插件，用于清理测试时留下的日志。 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

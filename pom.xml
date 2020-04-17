@@ -59,6 +59,7 @@
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -422,16 +423,21 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven-war-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
 
     <modules>
+        <module>fdr-manager-ui</module>
         <module>fdr-manager-stack</module>
         <module>fdr-manager-sdk</module>
         <module>fdr-manager-impl</module>
         <module>fdr-manager-node</module>
-        <module>fdr-manager-ui</module>
         <module>fdr-manager-distribution</module>
     </modules>
 </project>

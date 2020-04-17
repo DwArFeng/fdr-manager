@@ -20,6 +20,7 @@
     </properties>
 
     <build>
+        <!-- Maven 前端插件，用于执行npm指令。 -->
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -40,11 +41,21 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>generate-resources</phase>
                         <!-- Optional configuration which provides for running any npm command -->
                         <configuration>
                             <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <!-- Lint files -->
+                    <execution>
+                        <id>npm run lint</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run lint</arguments>
                         </configuration>
                     </execution>
                     <!-- Build and minify static files -->
@@ -53,11 +64,24 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                        <phase>generate-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Maven 清理插件，用于清理dist文件。 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>dist</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
         </plugins>
     </build>
