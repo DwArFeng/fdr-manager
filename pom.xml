@@ -6,7 +6,7 @@
 
     <groupId>com.dwarfeng</groupId>
     <artifactId>fdr-manager</artifactId>
-    <version>1.0.0.a-SNAPSHOT</version>
+    <version>1.0.0.a</version>
 
     <packaging>pom</packaging>
 
@@ -60,6 +60,7 @@
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -365,7 +366,7 @@
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-stack</artifactId>
-                <version>1.0.0.a-SNAPSHOT</version>
+                <version>1.0.0.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
@@ -375,22 +376,22 @@
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-impl</artifactId>
-                <version>1.0.0.a-SNAPSHOT</version>
+                <version>1.0.0.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-node</artifactId>
-                <version>1.0.0.a-SNAPSHOT</version>
+                <version>1.0.0.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-ui</artifactId>
-                <version>1.0.0.a-SNAPSHOT</version>
+                <version>1.0.0.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-distribution</artifactId>
-                <version>1.0.0.a-SNAPSHOT</version>
+                <version>1.0.0.a</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -428,6 +429,11 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -435,7 +441,6 @@
     <modules>
         <module>fdr-manager-ui</module>
         <module>fdr-manager-stack</module>
-        <module>fdr-manager-sdk</module>
         <module>fdr-manager-impl</module>
         <module>fdr-manager-node</module>
         <module>fdr-manager-distribution</module>

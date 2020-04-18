@@ -7,8 +7,10 @@
     <parent>
         <artifactId>fdr-manager</artifactId>
         <groupId>com.dwarfeng</groupId>
-        <version>1.0.0.a-SNAPSHOT</version>
+        <version>1.0.0.a</version>
     </parent>
+
+    <packaging>pom</packaging>
 
     <artifactId>fdr-manager-ui</artifactId>
     <name>fdr-manager-ui</name>

@@ -7,8 +7,10 @@
     <parent>
         <artifactId>fdr-manager</artifactId>
         <groupId>com.dwarfeng</groupId>
-        <version>1.0.0.a-SNAPSHOT</version>
+        <version>1.0.0.a</version>
     </parent>
+
+    <packaging>pom</packaging>
 
     <artifactId>fdr-manager-distribution</artifactId>
     <name>fdr-manager-distribution</name>
@@ -18,4 +20,31 @@
         <!-- 进行工程编码声明 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <build>
+        <!-- 插件列表 -->
+        <plugins>
+            <!-- Maven 装配插件，用于装配项目文件。 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>single</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/assembly.xml</descriptor>
+                            </descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
+                            <attach>false</attach>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
