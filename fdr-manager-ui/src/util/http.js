@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
 } else if (process.env.NODE_ENV === 'debug') {
   urlPrefix = 'https://www.debug.com';
 } else if (process.env.NODE_ENV === 'production') {
-  urlPrefix = 'http://10.10.10.30:8080/fdr-manager';
+  urlPrefix = 'http://localhost:8080/fdr-manager';
 }
 axios.defaults.baseURL = urlPrefix + API_PREFIX + VERSION_PREFIX;
 
