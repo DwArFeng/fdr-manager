@@ -71,7 +71,6 @@
       fdr_manager.exception_code_offset.subgrade=0
       ```
       
-
 6. enjoy it
 
 ---
