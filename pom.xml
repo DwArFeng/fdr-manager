@@ -6,7 +6,7 @@
 
     <groupId>com.dwarfeng</groupId>
     <artifactId>fdr-manager</artifactId>
-    <version>1.0.1.a</version>
+    <version>1.0.2.a</version>
 
     <packaging>pom</packaging>
 
@@ -51,8 +51,8 @@
         <dozer.version>5.5.1</dozer.version>
         <dutil.version>beta-0.2.1.a</dutil.version>
         <snowflake.version>1.2.4.a</snowflake.version>
-        <fdr.version>1.6.3.b</fdr.version>
-        <subgrade.version>1.0.0.a</subgrade.version>
+        <fdr.version>1.6.7.a</fdr.version>
+        <subgrade.version>1.0.1.a</subgrade.version>
         <!-- Maven插件版本声明 -->
         <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
@@ -366,27 +366,27 @@
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-stack</artifactId>
-                <version>1.0.1.a</version>
+                <version>1.0.2.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-impl</artifactId>
-                <version>1.0.1.a</version>
+                <version>1.0.2.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-node</artifactId>
-                <version>1.0.1.a</version>
+                <version>1.0.2.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-ui</artifactId>
-                <version>1.0.1.a</version>
+                <version>1.0.2.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>fdr-manager-distribution</artifactId>
-                <version>1.0.1.a</version>
+                <version>1.0.2.a</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
