@@ -193,7 +193,7 @@ import {
   childForTriggerBetween,
   exists,
   inspect,
-} from '../../api/triggeredValue';
+} from '@/api/triggeredValue';
 
 export default {
   name: 'Permission',

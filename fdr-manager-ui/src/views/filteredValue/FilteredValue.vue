@@ -187,7 +187,7 @@
 import {
   exists, inspect, all, allBetween, childForPoint, childForPointBetween,
   childForFilter, childForFilterBetween,
-} from '../../api/filteredValue';
+} from '@/api/filteredValue';
 
 export default {
   name: 'Permission',

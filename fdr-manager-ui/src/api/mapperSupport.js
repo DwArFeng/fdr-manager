@@ -1,4 +1,4 @@
-import { get } from '../util/http';
+import { get } from '@/util/http';
 
 export function exists(key) {
   return get(`/mapper-support/${key}/exists`, {});

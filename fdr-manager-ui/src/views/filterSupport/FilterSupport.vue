@@ -147,7 +147,7 @@
 <script>
 import {
   all, idLike, labelLike,
-} from '../../api/filterSupport';
+} from '@/api/filterSupport';
 
 export default {
   name: 'Permission',

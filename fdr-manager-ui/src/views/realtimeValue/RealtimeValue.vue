@@ -128,7 +128,7 @@
 <script>
 import {
   all, exists, inspect,
-} from '../../api/realtimeValue';
+} from '@/api/realtimeValue';
 
 export default {
   name: 'Permission',

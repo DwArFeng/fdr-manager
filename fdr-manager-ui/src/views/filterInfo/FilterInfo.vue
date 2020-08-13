@@ -335,13 +335,13 @@
 <script>
 import {
   exists as existsFilterInfo, all as allFilterInfo, childForPoint, insert, remove, update,
-} from '../../api/filterInfo';
-import { exists as existsPoint } from '../../api/point';
+} from '@/api/filterInfo';
 import {
   all as allFilterSupport,
   idLike as idLikeFilterSupport,
   labelLike as labelLikeFilterSupport,
-} from '../../api/filterSupport';
+} from '@/api/filterSupport';
+import { exists as existsPoint } from '../../api/point';
 
 export default {
   name: 'Permission',

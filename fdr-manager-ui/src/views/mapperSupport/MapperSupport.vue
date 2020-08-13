@@ -147,7 +147,7 @@
 <script>
 import {
   all, idLike, labelLike,
-} from '../../api/mapperSupport';
+} from '@/api/mapperSupport';
 
 export default {
   name: 'Permission',

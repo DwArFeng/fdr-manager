@@ -152,7 +152,7 @@
 <script>
 import {
   exists, inspect, all, allBetween, childForPoint, childForPointBetween,
-} from '../../api/persistenceValue';
+} from '@/api/persistenceValue';
 
 export default {
   name: 'Permission',

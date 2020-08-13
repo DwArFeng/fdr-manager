@@ -206,7 +206,7 @@
 <script>
 import {
   all, exists, insert, inspect, nameLike, remove, update,
-} from '../../api/point';
+} from '@/api/point';
 
 export default {
   name: 'Permission',

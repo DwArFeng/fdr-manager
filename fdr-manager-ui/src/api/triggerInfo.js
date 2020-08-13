@@ -1,6 +1,6 @@
 import {
   del, get, patch, post,
-} from '../util/http';
+} from '@/util/http';
 
 export function exists(key) {
   return get(`/trigger-info/${key}/exists`, {});
