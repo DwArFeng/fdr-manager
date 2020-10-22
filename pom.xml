@@ -51,7 +51,7 @@
         <dozer.version>5.5.1</dozer.version>
         <dutil.version>beta-0.2.1.a</dutil.version>
         <snowflake.version>1.2.4.a</snowflake.version>
-        <fdr.version>1.7.2.a</fdr.version>
+        <fdr.version>1.8.5.a</fdr.version>
         <subgrade.version>1.1.3.a</subgrade.version>
         <!-- Maven插件版本声明 -->
         <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
