@@ -339,7 +339,6 @@ export default {
       }
     },
     closeMonitorDialog() {
-      console.log('123456');
       this.monitorVisible = false;
       this.refreshTimer();
     },
