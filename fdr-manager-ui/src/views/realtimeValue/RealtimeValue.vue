@@ -79,7 +79,8 @@
     <el-dialog
       title="监视"
       :visible.sync="monitorVisible"
-      center>
+      center
+      @closed="closeMonitorDialog">
       <el-form
         label-width="80px"
         label-position="right"
@@ -338,6 +339,7 @@ export default {
       }
     },
     closeMonitorDialog() {
+      console.log('123456');
       this.monitorVisible = false;
       this.refreshTimer();
     },
